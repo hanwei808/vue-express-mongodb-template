@@ -36,8 +36,7 @@ app.use(express.urlencoded({
 
 morgan.token('custom', function (req, res) {
   // 返回自定义字符串
-  console.log('req.body', req.body)
-  return req.headers;
+  return "sessionID: " + req.sessionID;
 });
 
 app.use(morgan(':method :url :custom'));

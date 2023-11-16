@@ -34,6 +34,13 @@ export const login = [
         body('user.password').notEmpty().withMessage('密码不能为空')
     ]),
     validate([
+        body('user.imgcode').custom(async (imgcode, { req }) => {
+          if (imgcode !== req.session.captcha) {
+              return Promise.reject(new Error("验证码错误"));
+          }
+        })
+    ]),
+    validate([
         body('user.username').custom(async (username, { req }) => {
           const user = await models.User.findOne({ username })
               .select(['username', 'password', 'email', 'bio', 'image', ]);

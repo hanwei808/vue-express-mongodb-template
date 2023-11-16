@@ -4,7 +4,7 @@ export interface ILoginInfo {
     slide: string[]
 }
 
-export interface ILoginResponse {
+export interface ILogin {
     username: string
     password: string
     email: string
@@ -13,6 +13,12 @@ export interface ILoginResponse {
     token: string
 }
 
-export interface IUsersResponse {
-    users: ILoginResponse[]
+export interface IUsers {
+    users: ILogin[]
+}
+
+export interface IResponse {
+    status: number
+    type: string
+    data: unknown
 }

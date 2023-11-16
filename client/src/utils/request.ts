@@ -20,7 +20,7 @@ request.interceptors.request.use(
 request.interceptors.response.use(
   response => {
     const { status } = response.data
-
+    console.log('response', response)
     // 请求成功
     if (!status || status === 200) {
       return response

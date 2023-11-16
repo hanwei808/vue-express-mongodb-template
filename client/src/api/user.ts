@@ -1,11 +1,14 @@
 import request from '@/utils/request'
-import { ILoginResponse, IUsersResponse } from './types/user'
+import { ILogin, IUsers } from './types/user'
 
 export const getCaptcha = () => {
-    return request<Blob>({
+    return request<{
+            status: number
+            type: string
+            data: Blob
+        }>({
         url: '/api/captcha',
-        method: 'get',
-        responseType: 'blob'
+        method: 'get'
     })
 }
 
@@ -13,18 +16,45 @@ export const login = (data: {
     user: {
         username: string
         password: string
-        imgCode: string
+        imgcode: string
     }
 }) => {
-        return request<ILoginResponse>({
+        return request<{
+            status: number
+            type: string
+            data: ILogin
+        }>({
             url: '/api/login',
             method: 'post',
             data
         })
     }
 
+export const register = (data: {
+        user: {
+            username: string
+            email: string
+            password: string
+            imgcode: string
+        }
+    }) => {
+            return request<{
+                status: number
+                type: string
+                data: ILogin
+            }>({
+                url: '/api/register',
+                method: 'post',
+                data
+            })
+        }
+
 export const users = () => {
-    return request<IUsersResponse>({
+    return request<{
+        status: number
+        type: string
+        data: IUsers
+    }>({
         url: '/api/users',
         method: 'get'
     })

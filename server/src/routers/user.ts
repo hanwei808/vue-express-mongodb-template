@@ -1,5 +1,5 @@
 
-import { register, login, logout, currentUser, users, captcha } from '../controllers/user';
+import Ctrl from '../controllers/index';
 import { login as vlLogin, register as vlRegister } from '../validator/user'
 import { Route } from '../types/route';
  
@@ -9,42 +9,42 @@ const user: Route[] = [
     path: '/register',
     middleware: [],
     validator: [vlRegister],
-    controller: register,
+    controller: Ctrl.user.register,
   },
   {
     method: 'post',
     path: '/login',
     middleware: [],
     validator: [vlLogin],
-    controller: login,
+    controller: Ctrl.user.login,
   },
   {
     method: 'get',
     path: '/logout',
     middleware: [],
     validator: [],
-    controller: logout
+    controller: Ctrl.user.logout
   },
   {
     method: 'get',
     path: '/users',
     validator: [],
     middleware: [],
-    controller: users
+    controller: Ctrl.user.users
   },
   {
     method: 'get',
     path: '/currentUser',
     middleware: [],
     validator: [],
-    controller: currentUser
+    controller: Ctrl.user.currentUser
   },
   {
     method: 'get',
     path: '/captcha',
     validator: [],
     middleware: [],
-    controller: captcha
+    controller: Ctrl.user.captcha
   }
 ]
 

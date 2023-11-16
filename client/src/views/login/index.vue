@@ -63,7 +63,7 @@
 </template>
 
 <script setup lang="ts">
-import { getCaptcha, login as aLogin, users } from '@/api/user'
+import { getCaptcha, login as aLogin } from '@/api/user'
 import { onMounted, reactive, ref } from 'vue'
 import type { FormInstance, FormRules } from 'element-plus'
 import router from '@/router/index';
@@ -73,12 +73,11 @@ const captcha = ref('')
 
 onMounted(() => {
   loadCaptcha()
-  users()
 })
 
 const loadCaptcha = async () => {
-  const data = await getCaptcha()
-  captcha.value = URL.createObjectURL(data)
+  const res = await getCaptcha()
+  captcha.value = URL.createObjectURL(new Blob([res.data], { type: 'image/svg+xml' }))
 }
 
 interface RuleForm {
@@ -118,10 +117,11 @@ const submitForm = async (formEl: FormInstance | undefined) => {
 
 const login = async () => {
 
-  let res = await aLogin({user: { username: ruleForm.username, password: ruleForm.password, imgCode: ruleForm.imgcode}})
-  console.log('==== res', res)
-  ElMessage.success('登录成功')
-  router.push('/')
+  let res = await aLogin({user: { username: ruleForm.username, password: ruleForm.password, imgcode: ruleForm.imgcode}})
+  if (res.status === 200) {
+    ElMessage.success('登录成功')
+    router.push('/')
+  }
 }
 </script>
 
