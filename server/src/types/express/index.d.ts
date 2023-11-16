@@ -11,5 +11,6 @@ declare module 'express-session' {
   interface SessionData {
     user?: any;
     token?: any;
+    captcha?: any;
   }
 }
