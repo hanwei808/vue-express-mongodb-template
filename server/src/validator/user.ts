@@ -35,22 +35,21 @@ export const login = [
     ]),
     validate([
         body('user.username').custom(async (username, { req }) => {
-            console.log('validator username', username)
-        const user = await models.User.findOne({ username })
-            .select(['username', 'password', 'email', 'bio', 'image', ]);
-        if (!user) {
-            return Promise.reject(new Error('用户不存在'));
-        }
+          const user = await models.User.findOne({ username })
+              .select(['username', 'password', 'email', 'bio', 'image', ]);
+          if (!user) {
+              return Promise.reject(new Error('用户不存在'));
+          }
 
-        // 将数据挂载到请求对象中，后续的中间件也可以使用了
-        (req as any).user = user;
+          // 将数据挂载到请求对象中，后续的中间件也可以使用了
+          (req as any).user = user;
         })
     ]),
     validate([
         body('user.password').custom(async (password, { req }) => {
-        if (md5(password) !== (req as any).user.password) {
-            return Promise.reject(new Error('密码错误'));
-        }
+          if (md5(password) !== (req as any).user.password) {
+              return Promise.reject(new Error('密码错误'));
+          }
         })
     ])
 ];

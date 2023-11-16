@@ -3,6 +3,7 @@ import morgan from 'morgan';
 import errorhandler from 'errorhandler';
 import session, { SessionOptions } from 'express-session';
 import MongoStore from 'connect-mongo';
+import cors from 'cors'
 import { dbUri, jwtSecret } from './config/config.default';
 import router from './routers/index';
 // import './models/index';
@@ -24,13 +25,22 @@ const sessionOptions: SessionOptions = {
       }),
 };
 
+app.use(cors())
+
 app.use(session(sessionOptions));
 
-app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({
   extended: true
 }));
+
+morgan.token('custom', function (req, res) {
+  // 返回自定义字符串
+  console.log('req.body', req.body)
+  return req.headers;
+});
+
+app.use(morgan(':method :url :custom'));
 
 app.use('/api', router);
 
