@@ -9,6 +9,5 @@ export default async (req: Request & { session: Session & { user?: string } }, r
     }
 
     // 重定向到登录页
-    // 302 Location /login
     res.redirect('/login');
 };

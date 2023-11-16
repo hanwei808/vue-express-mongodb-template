@@ -3,12 +3,13 @@ import 'express-session'
 
 declare module 'express' {
   interface Request {
-    user?: any; // 您可以根据需要使用更具体的类型
+    user?: any;
   }
 }
 
 declare module 'express-session' {
   interface SessionData {
-    user?: any; // 您可以根据需要使用更具体的类型
+    user?: any;
+    token?: any;
   }
 }

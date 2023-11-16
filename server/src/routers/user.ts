@@ -1,16 +1,30 @@
 
-import { login, users, logout } from '../controllers/user';
+import { register, login, logout, currentUser, users } from '../controllers/user';
 import auth from '../middleware/auth'
-import { login as vlLogin } from '../validator/user'
+import { login as vlLogin, register as vlRegister } from '../validator/user'
 import { Route } from '../types/route';
  
 const user: Route[] = [
+  {
+    method: 'post',
+    path: '/register',
+    middleware: [],
+    validator: [vlRegister],
+    controller: register,
+  },
   {
     method: 'post',
     path: '/login',
     middleware: [auth],
     validator: [vlLogin],
     controller: login,
+  },
+  {
+    method: 'get',
+    path: '/logout',
+    middleware: [],
+    validator: [],
+    controller: logout
   },
   {
     method: 'get',
@@ -21,11 +35,11 @@ const user: Route[] = [
   },
   {
     method: 'get',
-    path: '/logout',
+    path: '/currentUser',
     middleware: [],
     validator: [],
-    controller: logout
-  }
+    controller: currentUser
+  },
 ]
 
 export default user

@@ -5,7 +5,7 @@ import session, { SessionOptions } from 'express-session';
 import MongoStore from 'connect-mongo';
 import { dbUri, jwtSecret } from './config/config.default';
 import router from './routers/index';
-import './models/index';
+// import './models/index';
 
 const app: Express = express();
 

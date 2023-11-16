@@ -1,39 +1,39 @@
 
 import { Handler } from '../types/route';
 import models from '../models/index'
- 
-export const login: Handler = (req, res) => {
-  const user = req.user
-  console.log('controller login user', user)
-    // 3. 保持登陆状态
-    req.session.user = user
+import { jwtSecret } from '../config/config.default'
+import { sign } from '../utils/jwt'
 
-    // 4. 跳转到首页
+export const register: Handler = async (req, res) => {
+  console.log('controller register')
+  const user = new models.User(req.body.user)
+  await user.save()
+  req.session.user = user
+  res.status(200).json({
+    user
+  })
+}
+
+export const login: Handler = async (req, res) => {
+    const user = req.user
+    const token = await sign({
+      _id: user._id
+    }, jwtSecret, {
+      expiresIn: 60 * 60 * 24
+    })
+
+    req.session.user = user
+    req.session.token = token
+
     res.status(200).json({
-      user
+      user,
+      token
     })
 }
 
 export const logout: Handler = async (req, res) => {
-  // 清除用户登录状态
   req.session.user = null
-  // 跳转到首页
   res.redirect('/')
-}
-
-export const register: Handler = async (req, res) => {
-  // 1. 数据验证
-  // 2. 验证通过，创建新的用户
-  const user = new models.User(req.body.user)
-  await user.save()
-
-  // 3. 保持登陆状态
-  req.session.user = user
-
-  // 4. 跳转到首页
-  res.status(200).json({
-    user
-  })
 }
 
 export const users: Handler = async (req, res) => {
@@ -41,5 +41,12 @@ export const users: Handler = async (req, res) => {
   const users = await models.User.find()
   res.status(200).json({
     users
+  })
+}
+
+export const currentUser: Handler = async (req, res) => {
+  res.status(200).json({
+    user: req.session.user,
+    token: req.session.token
   })
 }
