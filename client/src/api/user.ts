@@ -1,8 +1,10 @@
 import request from '@/utils/request'
 import { ILogin, IUsers } from './types/user'
+import { handleApiResponse } from './index';
+
 
 export const getCaptcha = () => {
-    return request<{
+    return handleApiResponse(request<{
             code: number
             message: string
             time: Date
@@ -10,7 +12,7 @@ export const getCaptcha = () => {
         }>({
         url: '/api/captcha',
         method: 'get'
-    })
+    }))
 }
 
 export const login = (data: {
@@ -20,7 +22,7 @@ export const login = (data: {
         imgcode: string
     }
 }) => {
-        return request<{
+        return handleApiResponse(request<{
             code: number
             message: string
             time: Date
@@ -29,7 +31,7 @@ export const login = (data: {
             url: '/api/login',
             method: 'post',
             data
-        })
+        }))
     }
 
 export const register = (data: {

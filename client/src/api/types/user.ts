@@ -16,10 +16,3 @@ export interface ILogin {
 export interface IUsers {
     users: ILogin[]
 }
-
-export interface IResponse {
-    code: number
-    message: string
-    time: Date
-    data: unknown
-}

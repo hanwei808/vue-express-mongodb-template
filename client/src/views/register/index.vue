@@ -78,8 +78,8 @@
   })
   
   const loadCaptcha = async () => {
-    const res = await getCaptcha()
-    if (res.code === 0) captcha.value = URL.createObjectURL(new Blob([res.data], { type: 'image/svg+xml' }))
+    const { response } = await getCaptcha()
+    captcha.value = URL.createObjectURL(new Blob([response as unknown as Blob], { type: 'image/svg+xml' }))
   }
   
   interface RuleForm {

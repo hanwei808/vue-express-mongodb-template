@@ -87,8 +87,8 @@ onMounted(() => {
 })
 
 const loadCaptcha = async () => {
-  const res = await getCaptcha()
-  if (res.code === 0) captcha.value = URL.createObjectURL(new Blob([res.data], { type: 'image/svg+xml' }))
+  const { response } = await getCaptcha()
+  captcha.value = URL.createObjectURL(new Blob([response as unknown as Blob], { type: 'image/svg+xml' }))
 }
 
 interface RuleForm {
@@ -150,18 +150,19 @@ const submitForm = async (formEl: FormInstance | undefined) => {
 
 const login = async (formEl: FormInstance | undefined) => {
 
-  let res = await aLogin({user: { username: ruleForm.username, password: ruleForm.password, imgcode: ruleForm.imgcode}})
-  console.log('res', res)
-  if (res.code === 0) {
+  const { error } = await aLogin({user: { username: ruleForm.username, password: ruleForm.password, imgcode: ruleForm.imgcode}})
+  if (error) {
+    if (error?.code === 401) {
+      imgcode_err.value = error.message
+      if (formEl) {
+        formEl.validateField('imgcode', () => {
+          loadCaptcha()
+        })
+      }
+    }
+  } else {
     ElMessage.success('登录成功')
     router.push('/')
-  } else if (res.code === 401 && res.message === '验证码错误') {
-    imgcode_err.value = res.message
-    if (formEl) {
-      formEl.validateField('imgcode', () => {
-        loadCaptcha()
-      })
-    }
   }
 }
 </script>
