@@ -20,7 +20,6 @@ request.interceptors.request.use(
 request.interceptors.response.use(
   response => {
     const { status } = response.data
-    console.log('response', response)
     // 请求成功
     if (!status || status === 200) {
       return response
@@ -29,19 +28,23 @@ request.interceptors.response.use(
     // 处理 Token 过期
 
     // 其它错误给出提示即可，比如 400 参数错误之类的
-    ElMessage({
-      type: 'error',
-      message: response.data.msg,
-      duration: 5 * 1000
-    })
+    // ElMessage({
+    //   type: 'error',
+    //   message: response.data?.message || 'Error',
+    //   duration: 3 * 1000
+    // })
     return Promise.reject(response)
   },
   err => {
-    console.log(err)
+    // 对响应错误做点什么
+    if (err.response && err.response.status === 400 && err.response.data.code === 401) {
+      // 处理 400 错误
+      return Promise.reject(err.response);
+    }
     ElMessage({
       type: 'error',
-      message: err.response?.data?.errors || err.message,
-      duration: 5 * 1000
+      message: err.response?.data?.message || err.message,
+      duration: 3 * 1000
     })
     return Promise.reject(err)
   }

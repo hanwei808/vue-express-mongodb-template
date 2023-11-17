@@ -9,7 +9,7 @@ Object.keys(allCtrls).forEach(name => {
         const ctrl = allCtrls[name][key]
         allCtrls[name][key] = async (req, res) => {
             const data = await ctrl(req, res)
-            const responseData = new ResponseData(data.status, data.code, data.message, new Date(), data.data)
+            const responseData = new ResponseData(data.code, data.message, new Date(), data.data)
             res.status(data.status)[data.type](responseData)
         }
     })

@@ -13,7 +13,15 @@ export const validate: (validations: ValidationChain[]) => ValidationMiddleware 
       return next();
     }
 
-    res.status(400).json({ errors: errors.array() });
+    let code = 400
+    if (errors.array()[0].msg === '验证码错误') code = 401
+    res.status(400).json({
+      code,
+      message: errors.array()[0].msg,
+      time: new Date(),
+      errors: errors.array()
+    });
+    
   };
 };
 

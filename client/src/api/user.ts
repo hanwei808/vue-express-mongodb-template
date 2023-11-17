@@ -40,17 +40,17 @@ export const register = (data: {
             imgcode: string
         }
     }) => {
-            return request<{
-                code: number
-                message: string
-                time: Date
-                data: ILogin
-            }>({
-                url: '/api/register',
-                method: 'post',
-                data
-            })
-        }
+        return request<{
+            code: number
+            message: string
+            time: Date
+            data: ILogin
+        }>({
+            url: '/api/register',
+            method: 'post',
+            data
+        })
+    }
 
 export const users = () => {
     return request<{
