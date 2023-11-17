@@ -1,6 +1,5 @@
 <template>
   <el-icon
-    class="toggle-full-screen"
     @click="toggleFullScreen"
   >
     <FullScreen />
@@ -20,9 +19,3 @@ const toggleFullScreen = () => {
     }
 }
 </script>
-
-<style lang="scss" scoped>
-.toggle-full-screen {
-  margin: 0 20px;
-}
-</style>
