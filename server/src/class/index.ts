@@ -1,7 +1,9 @@
 export class ResponseData<T> {
   constructor(
     public status: number,
+    public code: number,
     public message: string,
-    public data?: T
+    public time: Date,
+    public data?: T,
   ) {}
 }

@@ -18,7 +18,8 @@ export interface IUsers {
 }
 
 export interface IResponse {
-    status: number
-    type: string
+    code: number
+    message: string
+    time: Date
     data: unknown
 }

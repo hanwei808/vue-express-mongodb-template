@@ -19,6 +19,8 @@ const register: Handler = async (req, res) => {
 
   return {
     status: 200,
+    code: 0,
+    message: 'success',
     type: 'json',
     data: {
       user: {
@@ -45,6 +47,8 @@ const login: Handler = async (req, res) => {
 
     return {
       status: 200,
+      code: 0,
+      message: 'success',
       type: 'json',
       data: {
         user,
@@ -65,6 +69,8 @@ const users: Handler = async (req, res) => {
   const users = await models.User.find()
   return {
     status: 200,
+    code: 0,
+    message: 'success',
     type: 'json',
     data: {
       users
@@ -75,6 +81,8 @@ const users: Handler = async (req, res) => {
 const currentUser: Handler = async (req, res) => {
   return {
     status: 200,
+    code: 0,
+    message: 'success',
     type: 'json',
     data: {
       user: req.session.user,
@@ -89,6 +97,8 @@ const captcha: Handler = async (req, res) => {
   res.type('svg');
   return {
     status: 200,
+    code: 0,
+    message: 'success',
     type: 'send',
     data: captcha.data
   }

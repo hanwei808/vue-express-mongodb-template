@@ -79,14 +79,14 @@
   
   const loadCaptcha = async () => {
     const res = await getCaptcha()
-    captcha.value = URL.createObjectURL(new Blob([res.data], { type: 'image/svg+xml' }))
+    if (res.code === 0) captcha.value = URL.createObjectURL(new Blob([res.data], { type: 'image/svg+xml' }))
   }
   
   interface RuleForm {
     username: string
     email: string
     password: string
-    imgcode: string,
+    imgcode: string
   }
   
   const formSize = ref('default')
@@ -130,7 +130,7 @@
   const register = async () => {
   
     let res = await apiRegister({user: { username: ruleForm.username, email: ruleForm.email, password: ruleForm.password, imgcode: ruleForm.imgcode}})
-    if (res.status === 200) {
+    if (res.code === 0) {
       ElMessage.success('登录成功')
       router.push('/')
     }

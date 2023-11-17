@@ -3,8 +3,9 @@ import { ILogin, IUsers } from './types/user'
 
 export const getCaptcha = () => {
     return request<{
-            status: number
-            type: string
+            code: number
+            message: string
+            time: Date
             data: Blob
         }>({
         url: '/api/captcha',
@@ -20,8 +21,9 @@ export const login = (data: {
     }
 }) => {
         return request<{
-            status: number
-            type: string
+            code: number
+            message: string
+            time: Date
             data: ILogin
         }>({
             url: '/api/login',
@@ -39,8 +41,9 @@ export const register = (data: {
         }
     }) => {
             return request<{
-                status: number
-                type: string
+                code: number
+                message: string
+                time: Date
                 data: ILogin
             }>({
                 url: '/api/register',
@@ -51,8 +54,9 @@ export const register = (data: {
 
 export const users = () => {
     return request<{
-        status: number
-        type: string
+        code: number
+        message: string
+        time: Date
         data: IUsers
     }>({
         url: '/api/users',
