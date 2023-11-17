@@ -1,5 +1,6 @@
 import { createStore, Store, useStore as baseUseStore } from 'vuex'
 import { InjectionKey } from 'vue'
+import createPersistedState from 'vuex-persistedstate'
 
 export interface User {
   username: string
@@ -40,7 +41,8 @@ export const store = createStore<State>({
     setUser (state, payload) {
       state.user = payload
     },
-  }
+  },
+  plugins: [createPersistedState()]
 })
 
 // 定义自己的 `useStore` 组合式函数
