@@ -59,9 +59,13 @@ const login: Handler = async (req, res) => {
 
 const logout: Handler = async (req, res) => {
   req.session.user = null
+  req.session.token = null
   return {
-    type: 'redirect',
-    path: '/'
+    status: 200,
+    code: 0,
+    message: 'success',
+    type: 'json',
+    data: {}
   }
 }
 

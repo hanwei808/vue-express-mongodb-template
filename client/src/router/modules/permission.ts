@@ -13,7 +13,8 @@ const routers: RouteRecordRaw = {
             name: 'permission_admin',
             component: () => import('@/views/permission/admin/index.vue'),
             meta: {
-                title: '管理员列表'
+                title: '管理员列表',
+                requiresAuth: true
             }
         },
         {
@@ -21,8 +22,8 @@ const routers: RouteRecordRaw = {
             name: 'permission_role',
             component: () => import('@/views/permission/role/index.vue'),
             meta: {
-                title: '角色列表'
-            
+                title: '角色列表',
+                requiresAuth: true
             }
         },
         {
@@ -30,7 +31,8 @@ const routers: RouteRecordRaw = {
             name: 'permission_rule',
             component: () => import('@/views/permission/rule/index.vue'),
             meta: {
-                title: '规则列表'
+                title: '规则列表',
+                requiresAuth: true
             }
         },
     ]

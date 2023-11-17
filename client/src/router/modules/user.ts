@@ -13,7 +13,8 @@ const routers: RouteRecordRaw = {
             name: 'user_info',
             component: () => import('@/views/user/userInfo/index.vue'),
             meta: {
-                title: '个人中心'
+                title: '个人中心',
+                requiresAuth: true
             }
         },
     ]

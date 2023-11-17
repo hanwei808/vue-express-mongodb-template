@@ -1,14 +1,18 @@
 <template>
-  <div class="login">
+  <el-container class="login-container">
     <el-form
+      class="login-main"
       ref="ruleFormRef"
       :model="ruleForm"
       :rules="rules"
       label-width="120px"
-      class="demo-ruleForm"
       :size="formSize"
       status-icon
+      @keyup.enter="submitForm(ruleFormRef)"
     >
+      <h3 class="title">
+        登录
+      </h3>
       <el-form-item
         label="用户名"
         prop="username"
@@ -46,7 +50,7 @@
           >
         </div>
       </el-form-item>
-    
+  
       <el-form-item>
         <div style="display: flex;align-items: center;justify-content: space-around;width: 100%;">
           <el-button
@@ -65,7 +69,7 @@
         </div>
       </el-form-item>
     </el-form>
-  </div>
+  </el-container>
 </template>
 
 <script setup lang="ts">
@@ -173,12 +177,24 @@ const login = async (formEl: FormInstance | undefined) => {
 </script>
 
 <style lang="scss" scoped>
-.login {
+.login-container {
+  background-color: white;
+  height: 100vh;
   display: flex;
-  align-items: center;
   justify-content: center;
-  padding: 20px;
+  align-items: center;
 }
+.login-main {
+  width: 500px;
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.title {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
 .imgcode-wrap {
   display: flex;
   align-items: center;
@@ -186,4 +202,5 @@ const login = async (formEl: FormInstance | undefined) => {
     height: 37px;
   }
 }
+
 </style>

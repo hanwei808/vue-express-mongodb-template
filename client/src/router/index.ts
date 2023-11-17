@@ -15,7 +15,8 @@ const routes: RouteRecordRaw[] = [
                 name: 'home',
                 component: () => import('../views/home/index.vue'),
                 meta: {
-                    title: "首页"
+                    title: "首页",
+                    requiresAuth: false
                 }
             },
             user,
@@ -25,12 +26,20 @@ const routes: RouteRecordRaw[] = [
     {
         path: '/login',
         name: 'login',
-        component: () => import('../views/login/index.vue')
+        component: () => import('../views/login/index.vue'),
+        meta: {
+            title: "登录",
+            requiresAuth: false
+        }
     },
     {
         path: '/register',
         name: 'register',
-        component: () => import('../views/register/index.vue')
+        component: () => import('../views/register/index.vue'),
+        meta: {
+            title: "登录",
+            requiresAuth: false
+        }
     }
 ]
 
@@ -42,21 +51,15 @@ const router = createRouter({
 // 配置路由守卫
 router.beforeEach((to, from, next) => {
     nprogress.start()
-    const token = localStorage.getItem('token');
-  
-    // 检查 token 是否存在
-    if (token) {
-        // Token 存在，继续导航
-        next();
-    } else {
-        // Token 不存在或失效
-        if (to.name !== 'login') {
-            // 如果当前不是在登录页，重定向到登录页
-            next({ name: 'login' });
+    if (to.matched.some(record => record.meta.requiresAuth)) {
+        const token = localStorage.getItem('token')
+        if (token) {
+            next()
         } else {
-        // 如果已经在登录页，正常导航
-            next();
+            next({ name: 'login' })
         }
+    } else {
+        next()
     }
 })
 router.afterEach(() => {

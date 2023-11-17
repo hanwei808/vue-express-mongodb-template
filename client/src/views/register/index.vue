@@ -1,14 +1,18 @@
 <template>
-  <div class="login">
+  <el-container class="register-container">
     <el-form
+      class="register-main"
       ref="ruleFormRef"
       :model="ruleForm"
       :rules="rules"
       label-width="120px"
-      class="demo-ruleForm"
       :size="formSize"
       status-icon
+      @keyup.enter="submitForm(ruleFormRef)"
     >
+      <h3 class="title">
+        注册
+      </h3>
       <el-form-item
         label="用户名"
         prop="username"
@@ -54,18 +58,28 @@
       </el-form-item>
       
       <el-form-item>
-        <el-button
-          type="primary"
-          @click="submitForm(ruleFormRef)"
-        >
-          提交
-        </el-button>
-        <el-button @click="resetForm(ruleFormRef)">
-          重置
-        </el-button>
+        <div style="width: 100%;">
+          <el-button
+            type="primary"
+            @click="submitForm(ruleFormRef)"
+          >
+            确认
+          </el-button>
+          <el-button @click="resetForm(ruleFormRef)">
+            重置
+          </el-button>
+          <el-link
+            :underline="false"
+            type="primary"
+            @click="gotoLogin"
+            style="float: right;"
+          >
+            登录
+          </el-link>
+        </div>
       </el-form-item>
     </el-form>
-  </div>
+  </el-container>
 </template>
   
   <script setup lang="ts">
@@ -155,6 +169,10 @@
         if (!formEl) return
         formEl.resetFields()
     }
+
+    const gotoLogin = () => {
+        router.push('/login')
+    }
   
   const register = async (formEl: FormInstance | undefined) => {
   
@@ -176,11 +194,22 @@
   </script>
   
   <style lang="scss" scoped>
-  .login {
+  .register-container {
+    background-color: white;
+    height: 100vh;
     display: flex;
-    align-items: center;
     justify-content: center;
+    align-items: center;
+  }
+  .register-main {
+    width: 500px;
     padding: 20px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  }
+
+  .title {
+    text-align: center;
+    margin-bottom: 20px;
   }
   .imgcode-wrap {
     display: flex;

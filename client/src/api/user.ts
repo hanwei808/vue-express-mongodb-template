@@ -33,6 +33,25 @@ export const login = (data: {
         }))
     }
 
+export const logout = (data: {
+    user: {
+        username: string
+        password: string
+        imgcode: string
+    }
+}) => {
+        return handleApiResponse(request<{
+            code: number
+            message: string
+            time: Date
+            data: ILogin
+        }>({
+            url: '/api/logout',
+            method: 'post',
+            data
+        }))
+    }
+
 export const register = (data: {
         user: {
             username: string
