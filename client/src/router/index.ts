@@ -1,8 +1,9 @@
 import { RouteRecordRaw, createRouter, createWebHashHistory } from 'vue-router'
 import AppLayout from '@/layout/AppLayout.vue'
-import permission from '@/router/modules/permission'
 import nprogress from 'nprogress'
 import 'nprogress/nprogress.css'
+import permission from '@/router/modules/permission'
+import user from '@/router/modules/user'
 
 const routes: RouteRecordRaw[] = [
     {
@@ -17,6 +18,7 @@ const routes: RouteRecordRaw[] = [
                     title: "首页"
                 }
             },
+            user,
             permission
         ]
     },
@@ -38,8 +40,24 @@ const router = createRouter({
 })
 
 // 配置路由守卫
-router.beforeEach(() => {
+router.beforeEach((to, from, next) => {
     nprogress.start()
+    const token = localStorage.getItem('token');
+  
+    // 检查 token 是否存在
+    if (token) {
+        // Token 存在，继续导航
+        next();
+    } else {
+        // Token 不存在或失效
+        if (to.name !== 'login') {
+            // 如果当前不是在登录页，重定向到登录页
+            next({ name: 'login' });
+        } else {
+        // 如果已经在登录页，正常导航
+            next();
+        }
+    }
 })
 router.afterEach(() => {
     nprogress.done()

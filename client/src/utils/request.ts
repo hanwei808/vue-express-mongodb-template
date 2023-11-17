@@ -1,5 +1,6 @@
 import axios, { AxiosRequestConfig } from 'axios'
 import { ElMessage } from 'element-plus'
+import router from '@/router/index'
 
 const request = axios.create({})
 
@@ -8,6 +9,7 @@ request.interceptors.request.use(
   config => {
     // 容错：防止请求地址中有空格
     config.url = config.url?.trim()
+    config.headers.Authorization = `Bearer ${localStorage.getItem('token')}`
     return config
   },
   error => {
@@ -26,6 +28,12 @@ request.interceptors.response.use(
     // 对响应错误做点什么
     if (err.response && err.response.status === 400 && err.response.data.code === 401) {
       // 处理 400 错误
+      return Promise.reject(err.response.data);
+    }
+    if (err.response && err.response.status === 401) {
+      // 处理 401 错误
+      localStorage.setItem('token', '')
+      router.push('/login')
       return Promise.reject(err.response.data);
     }
     ElMessage({

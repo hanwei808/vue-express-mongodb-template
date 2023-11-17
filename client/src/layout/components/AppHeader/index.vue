@@ -4,6 +4,7 @@
       <ToggleSidebar />
       <Breadcrumb />
     </div>
+    {{ '用户：' + store?.state?.user?.username }}
     <div class="right">
       <FullScreen />
       <el-button
@@ -23,9 +24,15 @@ import ToggleSidebar from './ToggleSidebar.vue';
 import Breadcrumb from './Breadcrumb.vue'
 import FullScreen from './FullScreen.vue'
 import router from '@/router/index';
+import { useStore } from '@/store'
+const store = useStore()
 
 const gotoLogin = () => {
-  router.push('/login')
+  if (localStorage.getItem('token')) {
+    router.push('/user/user_info')
+  } else {
+    router.push('/login')
+  }
 }
 </script>
 

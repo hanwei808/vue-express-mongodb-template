@@ -25,6 +25,16 @@ export const register = validate([
       if (user) {
         return Promise.reject(new Error('邮箱已存在'));
       }
+    }),
+
+  body('user.imgcode')
+    .notEmpty().withMessage('验证不能为空')
+    // .isEmail().withMessage('邮箱格式不正确')
+    .bail()
+    .custom(async (imgcode, { req }) => {
+      if (imgcode !== req.session.captcha) {
+        return Promise.reject(new Error("验证码错误"));
+      }
     })
 ]);
 

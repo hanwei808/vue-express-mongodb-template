@@ -1,4 +1,10 @@
 <script setup lang="ts">
+  import { onMounted } from 'vue'
+  import router from '@/router/index'
+
+  onMounted(() => {
+    if (!localStorage.getItem('token')) router.push('/login')
+  })
 </script>
 
 <template>

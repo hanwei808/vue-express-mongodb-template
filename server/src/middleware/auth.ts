@@ -1,18 +1,18 @@
 import { Request, Response, NextFunction } from 'express';
 import { Session } from 'express-session';
+import { verify } from '../utils/jwt';
+import { jwtSecret } from '../config/config.default';
+import models from '../models/index';
 
 export default async (req: Request & { session: Session & { user?: string } }, res: Response, next: NextFunction) => {
     try {
-        // 检查有没有 Session user
-        const sessionUser = req.session.user;
-        if (sessionUser) {
-            return next();
-        } else {
-            // 重定向到登录页
-            res.redirect('/login');
-        }
+        let token = req.headers.authorization;
+        token = token ? token.split('Bearer ')[1] : null;
+        if (!token) res.status(401).end()
+        const decodeToken = await verify(token, jwtSecret)
+        req.user = await models.User.findById(decodeToken._id)
+        next()
     } catch (error) {
-        throw error.message;
+        return res.status(401).end();
     }
-    
 };

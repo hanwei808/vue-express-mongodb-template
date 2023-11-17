@@ -39,7 +39,7 @@ const login: Handler = async (req, res) => {
     const token = await sign({
       _id: user._id
     }, jwtSecret, {
-      expiresIn: 60 * 60 * 24
+      expiresIn: 60 * 10
     })
 
     req.session.user = user
@@ -85,8 +85,12 @@ const currentUser: Handler = async (req, res) => {
     message: 'success',
     type: 'json',
     data: {
-      user: req.session.user,
-      token: req.session.token
+      user: {
+        username: req.user.username,
+        email: req.user.email,
+        bio: req.user.bio,
+        image: req.user.image
+      }
     }
   }
 }

@@ -31,11 +31,15 @@
           autocomplete="off"
         />
       </el-form-item>
-      <el-form-item prop="imgcode">
+      <el-form-item
+        prop="imgcode"
+        ref="imgcodeRef"
+      >
         <div class="imgcode-wrap">
           <el-input
             v-model="ruleForm.imgcode"
             placeholder="请输入验证码"
+            @input="imgcodeInput(ruleFormRef)"
           >
             <template #prefix>
               <i class="el-input__icon el-icon-key" />
@@ -70,8 +74,10 @@
   import type { FormInstance, FormRules } from 'element-plus'
   import router from '@/router/index';
   import { ElMessage } from 'element-plus';
+  import type { InternalRuleItem } from 'async-validator'
   
   const captcha = ref('')
+  const imgcode_err = ref('')
   
   onMounted(() => {
     loadCaptcha()
@@ -98,6 +104,25 @@
     imgcode: ''
   })
   
+  const customValidator = (
+    _rule: InternalRuleItem,
+    _value: string,
+    callback: (error?: string | Error) => void
+  ) => {
+    if (imgcode_err.value) {
+      callback(new Error(imgcode_err.value))
+    } else {
+      callback()
+    }
+  };
+
+  const imgcodeInput = (formEl: FormInstance | undefined) => {
+    imgcode_err.value = ''
+    if (formEl) {
+      formEl.clearValidate('imgcode')
+    }
+  }
+
   const rules = reactive<FormRules<RuleForm>>({
     username: [
       { required: true, message: '请输入用户名', trigger: 'blur' },
@@ -110,6 +135,7 @@
     ],
     imgcode: [
       { required: true, message: '请输入验证码', trigger: 'blur' },
+      { validator: customValidator }
     ],
   })
   
@@ -118,7 +144,7 @@
     await formEl.validate((valid, fields) => {
         if (valid) {
             console.log('submit!')
-            register()
+            register(formEl)
         } else {
             console.log('error submit!', fields)
         }
@@ -130,10 +156,19 @@
         formEl.resetFields()
     }
   
-  const register = async () => {
+  const register = async (formEl: FormInstance | undefined) => {
   
-    let res = await apiRegister({user: { username: ruleForm.username, email: ruleForm.email, password: ruleForm.password, imgcode: ruleForm.imgcode}})
-    if (res.code === 0) {
+    const { error } = await apiRegister({user: { username: ruleForm.username, email: ruleForm.email, password: ruleForm.password, imgcode: ruleForm.imgcode}})
+    if (error) {
+      if (error?.code === 401) {
+        imgcode_err.value = error.message
+        if (formEl) {
+          formEl.validateField('imgcode', () => {
+            loadCaptcha()
+          })
+        }
+      }
+    } else {
       ElMessage.success('登录成功')
       router.push('/')
     }

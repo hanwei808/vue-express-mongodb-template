@@ -2,6 +2,7 @@
 import Ctrl from '../controllers/index';
 import { login as vlLogin, register as vlRegister } from '../validator/user'
 import { Route } from '../types/route';
+import auth from '../middleware/auth'
  
 const user: Route[] = [
   {
@@ -35,7 +36,7 @@ const user: Route[] = [
   {
     method: 'get',
     path: '/currentUser',
-    middleware: [],
+    middleware: [auth],
     validator: [],
     controller: Ctrl.user.currentUser
   },

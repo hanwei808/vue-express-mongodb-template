@@ -75,6 +75,9 @@ import type { FormInstance, FormRules } from 'element-plus'
 import router from '@/router/index';
 import { ElMessage, ElFormItem } from 'element-plus';
 import type { InternalRuleItem } from 'async-validator'
+import { useStore } from '@/store'
+
+const store = useStore()
 
 
 const imgcodeRef = ref<InstanceType<typeof ElFormItem> | null>(null)
@@ -150,7 +153,7 @@ const submitForm = async (formEl: FormInstance | undefined) => {
 
 const login = async (formEl: FormInstance | undefined) => {
 
-  const { error } = await aLogin({user: { username: ruleForm.username, password: ruleForm.password, imgcode: ruleForm.imgcode}})
+  const { error, response } = await aLogin({user: { username: ruleForm.username, password: ruleForm.password, imgcode: ruleForm.imgcode}})
   if (error) {
     if (error?.code === 401) {
       imgcode_err.value = error.message
@@ -162,6 +165,8 @@ const login = async (formEl: FormInstance | undefined) => {
     }
   } else {
     ElMessage.success('登录成功')
+    localStorage.setItem('token', response?.token);
+    store.commit('setUser', response?.user)
     router.push('/')
   }
 }

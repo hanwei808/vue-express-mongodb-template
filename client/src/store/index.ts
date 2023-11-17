@@ -36,7 +36,10 @@ export const store = createStore<State>({
   mutations: {
     toggleCollapse (state, payload) {
       state.isCollapse = payload
-    }
+    },
+    setUser (state, payload) {
+      state.user = payload
+    },
   }
 })
 
