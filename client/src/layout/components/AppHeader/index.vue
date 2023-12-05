@@ -25,6 +25,8 @@ import Avatar from './Avatar.vue';
     align-items: center;
     justify-content: space-between;
     padding: 16px;
+    border-bottom: solid 1px #bebebe;
+
     .left,.right {
         display: flex;
         align-items: center;

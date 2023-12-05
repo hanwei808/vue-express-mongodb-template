@@ -1,11 +1,10 @@
 <template>
   <div class="app-menu">
     <el-menu
-      active-text-color="#ffd04b"
-      background-color="#545c64"
+      active-text-color="rgb(29, 147, 171)"
+      background-color="#fafafa"
       class="el-menu-vertical-demo"
       default-active="2"
-      text-color="#fff"
       @open="handleOpen"
       @close="handleClose"
       :collapse="$store.state.isCollapse"
@@ -50,11 +49,10 @@
   </script>
   
   <style lang="scss" scoped>
-  .app-menu {
-      background-color: #545c64;
-  }
   .el-menu {
       border-right: none;
+      height: 100%;
+      box-shadow: 5px 0 5px -5px rgba(0, 0, 0, 0.2);
   }
   .el-menu:not(.el-menu--collapse) {
     width: 200px;
