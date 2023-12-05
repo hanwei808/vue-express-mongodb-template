@@ -2,20 +2,65 @@
 import { Handler } from '../types/route';
 import models from '../models/index'
 import { jwtSecret } from '../config/config.default'
-import { sign } from '../utils/jwt'
+import { sign, verify } from '../utils/jwt'
 import svgCaptcha from 'svg-captcha'
+
+const AccessTokenExpiresIn = 60 * 10
+const refreshTokenExpiresIn = 60 * 60 * 24
+
+const newToken = (userId, expiresIn) => sign({
+  _id: userId
+}, jwtSecret, {
+  expiresIn
+})
+
+const verifyRefreshToken: Handler = async (req, res) => {
+  let token = req.headers.authorization;
+  token = token ? token.split('Bearer ')[1] : null;
+  try {
+    if (token) {
+      const decodeToken = await verify(token, jwtSecret)
+      const accessToken = await newToken(decodeToken._id, AccessTokenExpiresIn)
+      req.session.accessToken = accessToken
+      return {
+        status: 200,
+        code: 0,
+        message: 'success',
+        type: 'json',
+        data: {
+          accessToken
+        }
+      }
+    }
+  } catch (error) {
+    return {
+      status: 401,
+      code: 401,
+      message: 'fail',
+      type: 'json',
+      data: {}
+    }
+  }
+
+  return {
+    status: 401,
+    code: 401,
+    message: 'fail',
+    type: 'json',
+    data: {}
+  }
+}
 
 const register: Handler = async (req, res) => {
   const user = new models.User(req.body.user)
   await user.save()
 
-  const token = await sign({
-    _id: user._id
-  }, jwtSecret, {
-    expiresIn: 60 * 60 * 24
-  })
+  const accessToken = await newToken(user._id, AccessTokenExpiresIn)
+  const refreshToken = await newToken(user._id, refreshTokenExpiresIn)
+
   req.session.user = user
-  req.session.token = token
+  req.session.accessToken = accessToken
+  req.session.refreshToken = refreshToken
 
   return {
     status: 200,
@@ -29,21 +74,21 @@ const register: Handler = async (req, res) => {
         bio: user.bio,
         image: user.image
       },
-      token
+      accessToken,
+      refreshToken
     }
   }
 }
 
 const login: Handler = async (req, res) => {
     const user = req.user
-    const token = await sign({
-      _id: user._id
-    }, jwtSecret, {
-      expiresIn: 60 * 10
-    })
+
+    const accessToken = await newToken(user._id, AccessTokenExpiresIn)
+    const refreshToken = await newToken(user._id, refreshTokenExpiresIn)
 
     req.session.user = user
-    req.session.token = token
+    req.session.accessToken = accessToken
+    req.session.refreshToken = refreshToken
 
     return {
       status: 200,
@@ -52,14 +97,16 @@ const login: Handler = async (req, res) => {
       type: 'json',
       data: {
         user,
-        token
+        accessToken,
+        refreshToken
       }
     }
 }
 
 const logout: Handler = async (req, res) => {
   req.session.user = null
-  req.session.token = null
+  req.session.accessToken = null
+  req.session.refreshToken = null
   return {
     status: 200,
     code: 0,
@@ -113,6 +160,7 @@ const captcha: Handler = async (req, res) => {
 }
 
 export default {
+  verifyRefreshToken,
   register,
   login,
   logout,

@@ -9,7 +9,7 @@ import router from './routers/index'
 
 const app: Express = express();
 
-const PORT = process.env.PORT || 3000
+const PORT = process.env.PORT || 3001
 
 const sessionOptions: SessionOptions = {
     secret: jwtSecret,

@@ -10,7 +10,11 @@ Object.keys(allCtrls).forEach(name => {
         allCtrls[name][key] = async (req, res) => {
             const data = await ctrl(req, res)
             const responseData = new ResponseData(data.code, data.message, new Date(), data.data)
-            res.status(data.status)[data.type](responseData)
+            if (data.code === 401) {
+                res.status(401).end()
+            } else {
+                res.status(data.status)[data.type](responseData)
+            }
         }
     })
 })

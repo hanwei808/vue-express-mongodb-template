@@ -10,7 +10,8 @@ declare module 'express' {
 declare module 'express-session' {
   interface SessionData {
     user?: any;
-    token?: any;
+    accessToken?: any;
+    refreshToken?: any;
     captcha?: any;
   }
 }

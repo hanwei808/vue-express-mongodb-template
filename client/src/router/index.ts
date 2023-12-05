@@ -4,6 +4,7 @@ import nprogress from 'nprogress'
 import 'nprogress/nprogress.css'
 import permission from '@/router/modules/permission'
 import user from '@/router/modules/user'
+import { getAccessToken } from '@/utils/storage'
 
 const routes: RouteRecordRaw[] = [
     {
@@ -52,7 +53,7 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
     nprogress.start()
     if (to.matched.some(record => record.meta.requiresAuth)) {
-        const token = localStorage.getItem('token')
+        const token = getAccessToken()
         if (token) {
             next()
         } else {

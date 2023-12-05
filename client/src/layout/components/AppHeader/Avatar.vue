@@ -39,13 +39,14 @@ import {
 import router from '@/router/index';
 import { useStore } from '@/store'
 import { ref, getCurrentInstance, ComponentInternalInstance } from 'vue'
+import { getAccessToken } from '@/utils/storage';
 
 const store = useStore()
 
 let subMenuVisible = ref(false)
 
 const gotoUserInfo = () => {
-    if (localStorage.getItem('token')) {
+    if (getAccessToken()) {
         router.push('/user/user_info')
     } else {
         router.push('/login')

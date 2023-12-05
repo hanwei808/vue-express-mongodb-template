@@ -80,6 +80,7 @@ import router from '@/router/index';
 import { ElMessage, ElFormItem } from 'element-plus';
 import type { InternalRuleItem } from 'async-validator'
 import { useStore } from '@/store'
+import { setAccessToken, setRefreshToken } from '@/utils/storage'
 
 const store = useStore()
 
@@ -169,7 +170,8 @@ const login = async (formEl: FormInstance | undefined) => {
     }
   } else {
     ElMessage.success('登录成功')
-    localStorage.setItem('token', response?.token);
+    setAccessToken(response?.accessToken)
+    setRefreshToken(response?.refreshToken)
     store.commit('setUser', response?.user)
     router.push('/')
   }

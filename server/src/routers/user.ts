@@ -46,7 +46,14 @@ const user: Route[] = [
     validator: [],
     middleware: [],
     controller: Ctrl.user.captcha
-  }
+  },
+  {
+    method: 'get',
+    path: '/verifyRefreshToken',
+    validator: [],
+    middleware: [],
+    controller: Ctrl.user.verifyRefreshToken
+  },
 ]
 
 export default user

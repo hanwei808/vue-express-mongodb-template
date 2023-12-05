@@ -2,6 +2,19 @@ import request from '@/utils/request'
 import { ILogin, IUsers } from './types/user'
 import { handleApiResponse } from './index';
 
+export const verifyRefreshToken = (data: { token: string }) => {
+    return handleApiResponse(request<{
+        code: number
+        message: string
+        time: Date
+        data: { accessToken: string }
+    }>({
+        url: '/api/verifyRefreshToken',
+        method: 'get',
+        data
+    }))
+}
+
 export const getCaptcha = () => {
     return handleApiResponse(request<{
             code: number
