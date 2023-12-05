@@ -5,7 +5,7 @@ Vue + Express + MongoDB + RESTful API
 - 前后端
   - [x] 注册登录
   - [x] API 鉴权
-  - [ ] Token 刷新
+  - [x] Token 无感刷新
   - [ ] 单点登录
 - 客户端
   - [ ] 定制主题
